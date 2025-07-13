@@ -15,6 +15,7 @@ const jobSchema = z.object({
   type: z.enum(['full-time', 'part-time', 'internship']),
   salary: z.string().optional(),
   requirements: z.array(z.string()),
+  deadline: z.string().optional(),
 })
 
 export async function GET(request: Request) {
@@ -54,7 +55,9 @@ export async function GET(request: Request) {
           description: job.description,
           requirements: job.requirements,
           postedAt: new Date(job.createdAt).toLocaleDateString(),
-          deadline: new Date(job.updatedAt).toLocaleDateString(),
+          deadline: job?.deadline
+            ? new Date(job.deadline).toLocaleDateString()
+            : new Date(new Date(job.createdAt).getTime() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString(),
           status: job.status || "active",
           applicants: applicationCount,
           employerId: job.employerId,

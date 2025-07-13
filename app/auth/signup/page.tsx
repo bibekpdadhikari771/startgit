@@ -365,7 +365,7 @@ export default function SignUpPage() {
                   <Building2 className="absolute left-3 top-3 h-4 w-4 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
                   <Input
                     id="schoolName"
-                    placeholder="University of Example"
+                    placeholder="University of School"
                     value={formData.schoolName}
                     onChange={(e) => handleInputChange("schoolName", e.target.value)}
                     onBlur={() => handleBlur("schoolName")}

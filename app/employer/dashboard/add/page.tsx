@@ -22,6 +22,7 @@ interface JobFormData {
   location: string
   type: "full-time" | "part-time" | "internship"
   salary: string
+  deadline: string
   requirements: string[]
 }
 
@@ -38,6 +39,7 @@ export default function PostJobPage() {
     location: "",
     type: "full-time",
     salary: "",
+    deadline: "",
     requirements: [],
   })
 
@@ -245,6 +247,25 @@ export default function PostJobPage() {
                       value={formData.salary}
                       onChange={handleInputChange}
                       placeholder="e.g. $80,000 - $100,000"
+                      className="transition-all duration-200"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-slate-500" />
+                      <label htmlFor="deadline" className="text-sm font-medium text-slate-700">
+                        Application Deadline
+                      </label>
+                    </div>
+                    <Input
+                      id="deadline"
+                      name="deadline"
+                      type="date"
+                      required
+                      value={formData.deadline}
+                      onChange={handleInputChange}
+                      min={new Date().toISOString()}
                       className="transition-all duration-200"
                     />
                   </div>

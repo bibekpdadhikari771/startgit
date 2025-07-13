@@ -37,7 +37,7 @@ export default function LandingPage() {
           </p>
 
           {/* Role Selection Cards */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-12">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-12">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-blue-200">
               <CardHeader className="text-center">
                 <GraduationCap className="h-12 w-12 text-blue-600 mx-auto mb-4" />
@@ -68,7 +68,7 @@ export default function LandingPage() {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-200">
+            {/* <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-200">
               <CardHeader className="text-center">
                 <Users className="h-12 w-12 text-purple-600 mx-auto mb-4" />
                 <CardTitle>School Admin</CardTitle>
@@ -81,7 +81,7 @@ export default function LandingPage() {
                   </Button>
                 </Link>
               </CardContent>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </section>

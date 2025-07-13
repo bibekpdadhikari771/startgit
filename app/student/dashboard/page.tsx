@@ -42,7 +42,7 @@ export default function StudentDashboard() {
   const [isApplying, setIsApplying] = useState<string | null>(null)
   const [isWithdrawing, setIsWithdrawing] = useState<string | null>(null)
   const [uniqueLocations, setUniqueLocations] = useState<string[]>([])
- console.log(typeFilter)
+  console.log(typeFilter)
   const fetchJobs = async () => {
     try {
       const response = await fetch("/api/jobs")
@@ -438,7 +438,13 @@ export default function StudentDashboard() {
                       </div>
                       <div className="flex justify-between items-center text-sm text-gray-500">
                         <span>Posted {new Date(job.createdAt).toLocaleDateString()}</span>
-                        <span>Deadline: {new Date(new Date(job.createdAt).setMonth(new Date(job.createdAt).getMonth() + 1)).toLocaleDateString()}</span>
+                        <span>
+                          Deadline: {
+                            job?.deadline
+                              ? job.deadline
+                              : new Date(new Date(job.createdAt).getTime() + 15 * 24 * 60 * 60 * 1000).toLocaleDateString()
+                          }
+                        </span>
                       </div>
                     </CardContent>
                   </Card>

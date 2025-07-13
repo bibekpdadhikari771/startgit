@@ -7,6 +7,7 @@ interface Job extends Document {
     company: string;
     location: string;
     type: 'full-time' | 'part-time' | 'internship';
+    deadline?: Date;
     salary?: string;
     requirements: string[];
     employerId: string;
@@ -36,6 +37,10 @@ const JobSchema: Schema<Job> = new Schema({
         type: String,
         enum: ['full-time', 'part-time', 'internship'],
         required: [true, 'Type is required'],
+    },
+    deadline: {
+        type: Date,
+        required: false,
     },
     salary: {
         type: String,

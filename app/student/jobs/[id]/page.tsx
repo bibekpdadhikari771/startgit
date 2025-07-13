@@ -12,13 +12,13 @@ import { useToast } from "@/hooks/use-toast"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { 
-  ArrowLeft, 
-  MapPin, 
-  Clock, 
-  DollarSign, 
-  Briefcase, 
-  Building, 
+import {
+  ArrowLeft,
+  MapPin,
+  Clock,
+  DollarSign,
+  Briefcase,
+  Building,
   Calendar,
   FileText,
   Upload,
@@ -51,7 +51,7 @@ export default function JobDetailsPage() {
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
-  
+
   const [job, setJob] = useState<Job | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isApplying, setIsApplying] = useState(false)
@@ -128,29 +128,29 @@ export default function JobDetailsPage() {
     }
   }
 
-   const uploadPDFToCloudinary = async (file: File): Promise<string> => {
+  const uploadPDFToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData()
     formData.append('file', file)
     formData.append('upload_preset', 'xmatoImage') // Your unsigned preset
-  
+
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/raw/upload`
-  
+
     const response = await fetch(url, {
       method: 'POST',
       body: formData,
     })
-  
+
     const data = await response.json()
-  
+
     if (!response.ok) {
       console.error('Cloudinary upload error:', data)
       throw new Error(data.error?.message || 'Upload failed')
     }
-  
+
     return data.secure_url
   }
-  
+
 
   const handleApply = async () => {
     if (!cvFile) {
@@ -176,7 +176,7 @@ export default function JobDetailsPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           jobId,
           cvUrl,
           coverLetter: coverLetter.trim() || undefined
@@ -285,7 +285,7 @@ export default function JobDetailsPage() {
     const isConfirmed = window.confirm(
       "Are you sure you want to withdraw your application? This action cannot be undone."
     )
-    
+
     if (!isConfirmed) {
       return
     }
@@ -360,7 +360,7 @@ export default function JobDetailsPage() {
     )
   }
 
-  const deadlineDate = new Date(new Date(job.createdAt).getTime() + 15 * 24 * 60 * 60 * 1000);
+  const deadlineDate = job?.deadline ? new Date(job.deadline) : new Date(new Date(job.createdAt).getTime() + 15 * 24 * 60 * 60 * 1000);
   const daysUntilDeadline = getDaysUntilDeadline(deadlineDate.toISOString());
 
   return (
@@ -470,7 +470,7 @@ export default function JobDetailsPage() {
                     </div>
                   ))}
                 </div>
-          </CardContent>
+              </CardContent>
             </Card>
           </div>
 
@@ -559,7 +559,7 @@ export default function JobDetailsPage() {
                         </div>
                         {uploadProgress > 0 && (
                           <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div 
+                            <div
                               className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${uploadProgress}%` }}
                             ></div>

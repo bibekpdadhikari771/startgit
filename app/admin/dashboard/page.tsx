@@ -373,7 +373,7 @@ export default function AdminDashboard() {
                       <Input
                         value={schoolSettings.name}
                         onChange={(e) => setSchoolSettings((prev) => ({ ...prev, name: e.target.value }))}
-                        placeholder="University of Example"
+                        placeholder="University of School"
                       />
                     </div>
                     <div>
