@@ -66,7 +66,6 @@ export async function POST(request: Request) {
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 60 * 60 * 24, // 24 hours
       path: '/',
-      domain: process.env.NODE_ENV === 'production' ? undefined : undefined,
     });
 
     // Return role-specific user data
