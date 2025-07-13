@@ -15,10 +15,8 @@ export async function GET() {
       })),
       nodeEnv: process.env.NODE_ENV,
       hasJwtSecret: !!process.env.JWT_SECRET,
-      requestHeaders: {
-        // This will help debug if cookies are being sent
-        cookie: 'cookie-header-not-available-in-server-component'
-      }
+      cookieDomain: process.env.COOKIE_DOMAIN || '.startgit.vercel.app',
+      isProduction: process.env.NODE_ENV === 'production',
     }, { status: 200 });
   } catch (error) {
     return NextResponse.json({
