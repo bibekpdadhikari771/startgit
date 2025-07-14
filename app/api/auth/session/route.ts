@@ -4,9 +4,13 @@ import { cookies } from 'next/headers';
 import UserModel from '@/app/models/user/student.model';
 import EmployerModel from '@/app/models/user/employer.model';
 import AdminModel from '@/app/models/user/admin.model';
+import { connectDb } from '@/lib/db/config/db.config';
 
 export async function GET(request: Request) {
   try {
+    // Connect to database first
+    await connectDb();
+    
     // Try to get token from Next.js cookies helper first
     let token = cookies().get('token')?.value;
     
@@ -29,35 +33,50 @@ export async function GET(request: Request) {
     }
     
     if (!token) {
+      console.log('Session API - No token found');
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
     // Verify token
+    if (!process.env.JWT_SECRET) {
+      console.error('Session API - JWT_SECRET is not set');
+      return NextResponse.json({ user: null }, { status: 200 });
+    }
+
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const { payload } = await jwtVerify(token, secret);
+    
+    console.log('Session API - Token payload:', { userId: payload.userId, role: payload.role });
     
     // Get user data from database based on role
     let user;
     const role = payload.role as string;
+    const userId = payload.userId as string;
     
     switch (role) {
       case 'student':
-        user = await UserModel.findById(payload.userId).select('-password');
+        user = await UserModel.findById(userId).select('-password');
+        console.log('Session API - Student user found:', !!user);
         break;
       case 'employer':
-        user = await EmployerModel.findById(payload.userId).select('-password');
+        user = await EmployerModel.findById(userId).select('-password');
+        console.log('Session API - Employer user found:', !!user);
         break;
       case 'admin':
-        user = await AdminModel.findById(payload.userId).select('-password');
+        user = await AdminModel.findById(userId).select('-password');
+        console.log('Session API - Admin user found:', !!user);
         break;
       default:
+        console.log('Session API - Invalid role:', role);
         return NextResponse.json({ user: null }, { status: 200 });
     }
     
     if (!user) {
+      console.log('Session API - User not found in database for userId:', userId, 'role:', role);
       return NextResponse.json({ user: null }, { status: 200 });
     }
 
+    console.log('Session API - Returning user data for:', user.email);
     return NextResponse.json({
       user: {
         ...user?._doc 
