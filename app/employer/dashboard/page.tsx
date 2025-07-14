@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
 import { Plus, Briefcase, Users, Eye, Edit, Trash2, User, Bell, BarChart3 } from "lucide-react"
+import { useSelector } from "react-redux"
+import { RootState } from "@/lib/store"
 
 interface SessionUser {
   companyName: string
@@ -59,14 +61,15 @@ interface Application {
 }
 
 export default function EmployerDashboard() {
-  const { data: session } = useSession() as { data: { user: SessionUser } | null }
+  const { user } = useSelector((state: RootState) => state.auth)
+
   const [jobs, setJobs] = useState<Job[]>([])
   const [applications, setApplications] = useState<Application[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("jobs")
   const { toast } = useToast()
-  console.log(activeTab)
+
   const fetchJobs = async () => {
     try {
       setIsLoading(true)
@@ -98,16 +101,16 @@ export default function EmployerDashboard() {
   }
 
   useEffect(() => {
-    if (session?.user) {
+    if (user) {
       fetchJobs()
     }
-  }, [session?.user])
+  }, [user])
 
   useEffect(() => {
-    if (session?.user && activeTab === "applications") {
+    if (user && activeTab === "applications") {
       fetchApplications()
     }
-  }, [session?.user, activeTab])
+  }, [user, activeTab])
 
   const handleDeleteJob = async (jobId: string) => {
     try {
@@ -259,7 +262,7 @@ export default function EmployerDashboard() {
       <div className="container mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {session?.user?.companyName}!</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back, {user?.companyName}!</h1>
           <p className="text-gray-600">Manage your job postings and applications</p>
         </div>
 

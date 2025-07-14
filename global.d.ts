@@ -6,6 +6,7 @@ declare namespace App {
     role: 'student' | 'employer' | 'admin';
     createdAt: string;
     updatedAt: string;
+    companyName?: string;
   }
 
   interface Job {
