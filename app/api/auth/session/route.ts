@@ -7,15 +7,25 @@ import AdminModel from '@/app/models/user/admin.model';
 
 export async function GET(request: Request) {
   try {
-    // Get token from cookie using Next.js cookies helper
-    const token = cookies().get('token')?.value;
+    // Try to get token from Next.js cookies helper first
+    let token = cookies().get('token')?.value;
+    
+    // If not found, try to get from request headers (fallback for production)
+    if (!token) {
+      const cookieHeader = request.headers.get('cookie');
+      if (cookieHeader) {
+        const tokenMatch = cookieHeader.match(/token=([^;]+)/);
+        token = tokenMatch ? tokenMatch[1] : undefined;
+      }
+    }
     
     // Debug logging for production
     if (process.env.NODE_ENV === 'production') {
       console.log('Session API - NODE_ENV:', process.env.NODE_ENV);
-      console.log('Session API - Token present:', !!token);
-      console.log('Session API - Token length:', token?.length || 0);
-      console.log('Session API - All cookies:', cookies().getAll().map(c => ({ name: c.name, value: c.value ? `${c.value.substring(0, 10)}...` : 'undefined' })));
+      console.log('Session API - Token from cookies() helper:', !!cookies().get('token')?.value);
+      console.log('Session API - Token from headers:', !!token);
+      console.log('Session API - Cookie header present:', !!request.headers.get('cookie'));
+      console.log('Session API - All cookies from helper:', cookies().getAll().map(c => ({ name: c.name, value: c.value ? `${c.value.substring(0, 10)}...` : 'undefined' })));
     }
     
     if (!token) {
